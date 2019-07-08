@@ -326,7 +326,7 @@ async function getAllAlbums(albumIds) {
     let checked = 0;
     while (checked < albumIds.length) {
         let slice = [];
-        if (checked + 20 > albumIds.length) {
+        if (checked + 20 >= albumIds.length) {
             slice = albumIds.slice(checked);
             checked = albumIds.length;
         } else {
@@ -346,7 +346,7 @@ async function saveAllAlbums(albumIds) {
     while (saved < albumIds.length) {
         const maxCount = 20;
         let slice = [];
-        if (saved + maxCount > albumIds.length) {
+        if (saved + maxCount >= albumIds.length) {
             slice = albumIds.slice(saved);
             saved = albumIds.length;
         } else {
