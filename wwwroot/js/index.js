@@ -66,7 +66,6 @@ if (windowUrl.searchParams.has('accessToken')) {
             });
             albumsToSave.sort(sortAlbums);
             albumsTooLow.sort(sortAlbums);
-            console.log(unsavedAlbumIds.length);
             displayAlbums(albumsToSave, albumsTooLow);
         });
 } else if (windowUrl.searchParams.has('error')) {
@@ -254,7 +253,6 @@ function createCard(album, buttonClass) {
                     if (albumsTooLowIdsIndex != -1) {
                         albumsTooLowIds.splice(albumsTooLowIdsIndex, 1);
                     }
-                    console.log(unsavedAlbumIds.length);
                     $(event.target)
                         .removeClass('btn-primary')
                         .addClass('btn-success')
@@ -346,15 +344,20 @@ async function getAllAlbums(albumIds) {
 async function saveAllAlbums(albumIds) {
     let saved = 0;
     while (saved < albumIds.length) {
+        const maxCount = 20;
         let slice = [];
-        if (saved + 50 > albumIds.length) {
+        if (saved + maxCount > albumIds.length) {
             slice = albumIds.slice(saved);
             saved = albumIds.length;
         } else {
-            slice = albumIds.slice(saved, saved + 50);
-            saved += 50;
+            slice = albumIds.slice(saved, saved + maxCount);
+            saved += maxCount;
         }
-        await spotifyApi.addToMySavedAlbums(slice);
+        let response = await spotifyApi.addToMySavedAlbums(slice)
+            .catch(err => {
+                console.log(err);
+                // addAlert(err);
+            })
     }
 }
 
